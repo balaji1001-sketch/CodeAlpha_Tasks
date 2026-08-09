@@ -1,0 +1,43 @@
+# Environment variables — NEVER commit secrets
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environment
+venv/
+.venv/
+env/
+ENV/
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+
+
+# Static files (collected, not source)
+staticfiles/
+
+# Django migrations (see note below — optional)
+# */migrations/*.py
+# !*/migrations/__init__.py
+
+# IDE / editor files
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Coverage / test artifacts
+.coverage
+htmlcov/
+*.cover
+
+# MySQL dumps if you ever create local backups
+*.sql

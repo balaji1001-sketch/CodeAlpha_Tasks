@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Order Confirmed{% endblock %}
+
+{% block content %}
+<div class="detail-card">
+    <h1 class="page-title">Thank you! Your order is confirmed.</h1>
+    <p>Order #{{ order.id }} — Status: {{ order.status }}</p>
+
+    <table class="cart-table" style="margin-top: 1rem;">
+        <tr>
+            <th>Product</th><th>Price</th><th>Qty</th><th>Subtotal</th>
+        </tr>
+        {% for item in order.items.all %}
+        <tr>
+            <td>{{ item.product.name }}</td>
+            <td>₹{{ item.price }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>₹{{ item.price|floatformat:2 }} × {{ item.quantity }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h2 style="margin-top:1rem;">Total: ₹{{ order.total_amount }}</h2>
+    {% if order.status == 'pending' %}
+        <form method="post" action="{% url 'cancel_order' order.id %}" onsubmit="return confirm('Are you sure you want to cancel this order?');" class="form-actions">
+            {% csrf_token %}
+            <button type="submit" class="btn-danger">Cancel Order</button>
+        </form>
+    {% endif %}
+    <p><a href="{% url 'product_list' %}">Continue Shopping</a></p>
+</div>
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }}{% endblock %}
+
+{% block content %}
+<a href="{% url 'product_list' %}" class="btn btn-secondary">&larr; Back to products</a>
+
+<div class="detail-layout" style="margin-top: 1rem;">
+    <div class="detail-card">
+        {% if product.image %}
+            <div class="product-image-container">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" class="detail-image">
+            </div>
+        {% else %}
+            <div class="image-placeholder">No image</div>
+        {% endif %}
+    </div>
+    <div class="detail-card detail-meta">
+        <h1>{{ product.name }}</h1>
+        <p>{{ product.description }}</p>
+        <p><strong>Price:</strong> ₹{{ product.price }}</p>
+        <p><strong>In stock:</strong> {{ product.stock }}</p>
+        {% if user.is_authenticated %}
+            <form method="post" action="{% url 'add_to_cart' product.id %}" class="form-actions">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Add to Cart</button>
+            </form>
+        {% else %}
+            <p><a href="{% url 'login' %}">Login</a> to add this to your cart.</p>
+        {% endif %}
+    </div>
+</div>
+
+{% if recommended_products %}
+<div class="recommended-section">
+    <h2>Recommended for You</h2>
+    <div class="recommended-grid">
+        {% for recommended in recommended_products %}
+        <div class="product-card recommended-card">
+            {% if recommended.image %}
+                <img src="{{ recommended.image.url }}" alt="{{ recommended.name }}">
+            {% else %}
+                <div class="image-placeholder">No image</div>
+            {% endif %}
+            <h3>{{ recommended.name }}</h3>
+            <p class="product-price">₹{{ recommended.price }}</p>
+            <p>{{ recommended.description|truncatechars:80 }}</p>
+            <a href="{% url 'product_detail' recommended.pk %}" class="btn btn-primary">View Product</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+{% endblock %}

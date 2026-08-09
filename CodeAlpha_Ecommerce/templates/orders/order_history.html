@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}My Orders{% endblock %}
+
+{% block content %}
+<h1 class="page-title">My Orders</h1>
+
+{% if orders %}
+{% for order in orders %}
+<div class="order-card">
+    <p><strong>Order #{{ order.id }}</strong> — {{ order.created_at|date:"d M Y, H:i" }}</p>
+    <p>Status: {{ order.status }} | Total: ₹{{ order.total_amount }}</p>
+    <div class="form-actions">
+        <a href="{% url 'order_confirmation' order.id %}" class="btn btn-secondary">View details</a>
+        {% if order.status == 'pending' %}
+            <form method="post" action="{% url 'cancel_order' order.id %}" onsubmit="return confirm('Cancel this order?');" class="inline-form">
+                {% csrf_token %}
+                <button type="submit" class="btn-danger">Cancel</button>
+            </form>
+        {% endif %}
+    </div>
+</div>
+{% endfor %}
+{% else %}
+<div class="empty-state">
+    <p>You haven't placed any orders yet.</p>
+</div>
+{% endif %}
+{% endblock %}

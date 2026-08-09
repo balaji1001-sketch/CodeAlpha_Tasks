@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}All Products{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <div>
+        <div class="eyebrow">Fresh picks</div>
+        <h1>Simple shopping</h1>
+        <p>Browse your favorite products</p>
+    </div>
+    <div class="hero-card">
+        <strong>What you can do</strong>
+        <ul>
+            <li>View products quickly</li>
+            <li>Add items to your cart</li>
+            <li>Track your orders easily</li>
+        </ul>
+    </div>
+</div>
+
+<h2 class="page-title">Our Products</h2>
+<div class="category-filter">
+    <a href="?" class="category-pill {% if not selected_category %}active{% endif %}">All</a>
+    {% for category in categories %}
+        <a href="?category={{ category.id }}" class="category-pill {% if selected_category and selected_category.id == category.id %}active{% endif %}">{{ category.name }}</a>
+    {% endfor %}
+</div>
+
+<div class="product-grid">
+    {% for product in products %}
+    <div class="product-card">
+        {% if product.image %}
+            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+        {% else %}
+            <div class="image-placeholder">No image</div>
+        {% endif %}
+        <h3>{{ product.name }}</h3>
+        <p class="product-price">₹{{ product.price }}</p>
+        <a href="{% url 'product_detail' product.pk %}" class="btn btn-primary">View Details</a>
+    </div>
+    {% empty %}
+        <div class="empty-state">No products yet. Add some from the admin panel.</div>
+    {% endfor %}
+</div>
+{% endblock %}
