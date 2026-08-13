@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="LinkUp — a modern mini social media platform. Share photos, follow friends, and join the conversation." />
+  <meta name="theme-color" content="#0a66c2" />
+  <title>LinkUp — Share your moments</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script src="js/config.js"></script>
+</head>
+<body>
+  <header class="navbar">
+    <div class="navbar__inner">
+      <a class="brand" href="index.html">
+        <span class="brand__mark" id="brandMark"></span>
+        <span class="gradient-text">LinkUp</span>
+      </a>
+      <div class="navbar__actions">
+        <button class="theme-toggle" id="landingTheme" type="button" aria-label="Toggle dark mode">
+          <span class="theme-toggle__sun" id="sunIcon"></span>
+          <span class="theme-toggle__moon" id="moonIcon"></span>
+        </button>
+        <a class="btn btn--ghost btn--sm" href="login.html">Log in</a>
+        <a class="btn btn--primary btn--sm" href="register.html">Sign up</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="container hero">
+      <span class="hero__badge" id="heroBadge">Now with dark mode</span>
+      <h1 class="hero__title">Share your moments<br /><span class="gradient-text">with the people who matter</span></h1>
+      <p class="hero__text">
+        LinkUp is a fast, beautiful place to post photos, follow friends and keep the conversation
+        going. Built with Express, MongoDB and vanilla JavaScript — no framework required.
+      </p>
+      <div class="hero__cta">
+        <a class="btn btn--primary btn--lg" href="register.html">Create your account</a>
+        <a class="btn btn--ghost btn--lg" href="login.html">I already have one</a>
+      </div>
+    </section>
+
+    <section class="container feature-grid" id="features"></section>
+  </main>
+
+  <footer class="container" style="padding-bottom:40px;text-align:center;color:var(--text-3);font-size:.85rem">
+    LinkUp · Mini Social Media Platform · Built with Express, MongoDB &amp; vanilla JS
+  </footer>
+
+  <script src="js/api.js"></script>
+  <script src="js/ui.js"></script>
+  <script>
+    (function landing() {
+      'use strict';
+      const { Icons, Theme, escapeHtml } = window.UI;
+
+      document.getElementById('brandMark').innerHTML = Icons.logo;
+      document.getElementById('sunIcon').innerHTML = Icons.sun;
+      document.getElementById('moonIcon').innerHTML = Icons.moon;
+      document.getElementById('heroBadge').insertAdjacentHTML('afterbegin', Icons.sparkle);
+
+      document.getElementById('landingTheme').addEventListener('click', () => Theme.toggle());
+
+      const features = [
+        { icon: Icons.camera, title: 'Photo posts', text: 'Upload an image, write a caption, and publish in seconds. Edit or delete your posts anytime.' },
+        { icon: Icons.heart, title: 'Likes & comments', text: 'Double-tap to like, comment in real time, and see counters update instantly.' },
+        { icon: Icons.users, title: 'Follow system', text: 'Follow people you like and switch your feed between everyone and just the people you follow.' },
+        { icon: Icons.search, title: 'Live search', text: 'Find people as you type, by username or full name, with keyboard navigation built in.' },
+        { icon: Icons.shield, title: 'Secure by default', text: 'JWT auth, bcrypt password hashing, Helmet, CORS and rate limiting on every endpoint.' },
+        { icon: Icons.zap, title: 'Fast & responsive', text: 'Skeleton loading, infinite scroll and a layout that works on phone, tablet and desktop.' },
+      ];
+
+      document.getElementById('features').innerHTML = features
+        .map(
+          (f) => `
+        <article class="feature">
+          <div class="feature__icon">${f.icon}</div>
+          <h3 class="feature__title">${escapeHtml(f.title)}</h3>
+          <p class="feature__text">${escapeHtml(f.text)}</p>
+        </article>`
+        )
+        .join('');
+
+      // Already signed in? Go straight to the feed.
+      if (window.Auth.isLoggedIn()) {
+        window.location.replace('feed.html');
+      }
+    })();
+  </script>
+</body>
+</html>

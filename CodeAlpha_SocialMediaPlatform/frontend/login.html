@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Log in to LinkUp." />
+  <meta name="theme-color" content="#0a66c2" />
+  <title>Log in · LinkUp</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script src="js/config.js"></script>
+</head>
+<body>
+  <div class="auth">
+    <aside class="auth__aside">
+      <div class="auth__aside-inner">
+        <a class="brand" href="index.html" style="color:#fff;margin-bottom:36px">
+          <span class="brand__mark" style="width:42px;height:42px;padding:7px;border-radius:10px;background:rgba(255,255,255,.24)" id="asideMark"></span>
+          <span>LinkUp</span>
+        </a>
+        <h2 class="auth__headline">Welcome back.<br />Your feed missed you.</h2>
+        <p class="auth__sub">Sign in to catch up on new posts, reply to comments and share what you have been up to.</p>
+        <div class="auth__points" id="asidePoints"></div>
+      </div>
+    </aside>
+
+    <main class="auth__main">
+      <div class="auth__card">
+        <div class="row-between" style="margin-bottom:20px">
+          <a class="brand" href="index.html"><span class="brand__mark" id="cardMark"></span><span class="gradient-text">LinkUp</span></a>
+          <button class="theme-toggle" id="authTheme" type="button" aria-label="Toggle dark mode">
+            <span class="theme-toggle__sun" id="sunIcon"></span>
+            <span class="theme-toggle__moon" id="moonIcon"></span>
+          </button>
+        </div>
+
+        <h1 class="auth__title">Log in</h1>
+        <p class="auth__desc">Enter your email or username to continue.</p>
+
+        <form id="loginForm" novalidate>
+          <div class="field">
+            <label class="field__label" for="identifier">Email or username</label>
+            <input class="input" id="identifier" name="identifier" type="text" placeholder="Email or username" autocomplete="username" required />
+            <span class="field__error" data-error-for="identifier"></span>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="password">Password</label>
+            <div class="input-group">
+              <input class="input" id="password" name="password" type="password" placeholder="••••••••" autocomplete="current-password" required />
+              <button class="input-group__action" id="togglePassword" type="button" aria-label="Show password"></button>
+            </div>
+            <span class="field__error" data-error-for="password"></span>
+          </div>
+
+          <button class="btn btn--primary btn--block btn--lg" type="submit">Log in</button>
+        </form>
+
+        <div class="auth__divider">or</div>
+        <button class="btn btn--ghost btn--block" id="demoLogin" type="button">Use the demo account</button>
+
+        <div class="auth__demo">
+          Seeded demo login: <code>ada@example.com</code> / <code>Password123</code><br />
+          Run <code>npm run seed</code> in the backend folder to create it.
+        </div>
+
+        <p class="auth__foot">Don't have an account? <a href="register.html">Sign up</a></p>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    (function decorate() {
+      'use strict';
+      const { Icons, Theme, escapeHtml } = window.UI;
+
+      document.getElementById('asideMark').innerHTML = Icons.logo;
+      document.getElementById('cardMark').innerHTML = Icons.logo;
+      document.getElementById('sunIcon').innerHTML = Icons.sun;
+      document.getElementById('moonIcon').innerHTML = Icons.moon;
+      document.getElementById('authTheme').addEventListener('click', () => Theme.toggle());
+
+      const points = [
+        { icon: Icons.camera, text: 'Post photos with captions' },
+        { icon: Icons.heart, text: 'Like and comment instantly' },
+        { icon: Icons.users, text: 'Follow the people you care about' },
+        { icon: Icons.globe, text: 'Works on phone, tablet and desktop' },
+      ];
+
+      document.getElementById('asidePoints').innerHTML = points
+        .map((p) => `<div class="auth__point"><span class="auth__point-icon">${p.icon}</span><span>${escapeHtml(p.text)}</span></div>`)
+        .join('');
+    })();
+  </script>
+</body>
+</html>

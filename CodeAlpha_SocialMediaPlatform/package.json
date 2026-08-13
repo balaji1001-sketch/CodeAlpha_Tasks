@@ -1,0 +1,39 @@
+{
+  "name": "linkup-social-media",
+  "version": "1.0.0",
+  "private": true,
+  "description": "LinkUp — Mini Social Media Platform. Backend (API, port 5000) and frontend (static site, port 5173) run as two separate servers.",
+  "scripts": {
+    "setup": "bash setup.sh",
+    "install:all": "cd backend && npm install",
+    "dev": "cd backend && npm run dev",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "dev:all": "concurrently -n backend,frontend -c blue,green \"npm:dev:backend\" \"npm:dev:frontend\"",
+    "start": "cd backend && npm start",
+    "start:frontend": "cd frontend && npm start",
+    "seed": "cd backend && npm run seed",
+    "test": "cd backend && MONGO_URI=mongodb://127.0.0.1:27017/socialmedia_test npm run test:smoke",
+    "mongo:start": "brew services start mongodb-community@7.0",
+    "mongo:stop": "brew services stop mongodb-community@7.0",
+    "mongo:status": "brew services list | grep mongodb",
+    "mongo:shell": "mongosh mongodb://127.0.0.1:27017/socialmedia",
+    "db:reset": "mongosh mongodb://127.0.0.1:27017/socialmedia --quiet --eval 'db.dropDatabase()' && echo 'Database dropped.'",
+    "open": "open http://localhost:5000",
+    "port:free": "lsof -ti:5000 | xargs kill -9 2>/dev/null || echo 'Port 5000 already free.'"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "social-media",
+    "express",
+    "mongodb",
+    "jwt",
+    "vanilla-js"
+  ],
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "license": "MIT"
+}

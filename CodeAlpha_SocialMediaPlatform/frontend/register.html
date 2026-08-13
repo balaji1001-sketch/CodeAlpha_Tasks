@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Create your LinkUp account." />
+  <meta name="theme-color" content="#0a66c2" />
+  <title>Sign up · LinkUp</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <script src="js/config.js"></script>
+</head>
+<body>
+  <div class="auth">
+    <aside class="auth__aside">
+      <div class="auth__aside-inner">
+        <a class="brand" href="index.html" style="color:#fff;margin-bottom:36px">
+          <span class="brand__mark" style="width:42px;height:42px;padding:7px;border-radius:10px;background:rgba(255,255,255,.24)" id="asideMark"></span>
+          <span>LinkUp</span>
+        </a>
+        <h2 class="auth__headline">Start sharing<br />in under a minute.</h2>
+        <p class="auth__sub">Create a free account, upload your first photo and start building your circle.</p>
+        <div class="auth__points" id="asidePoints"></div>
+      </div>
+    </aside>
+
+    <main class="auth__main">
+      <div class="auth__card">
+        <div class="row-between" style="margin-bottom:20px">
+          <a class="brand" href="index.html"><span class="brand__mark" id="cardMark"></span><span class="gradient-text">LinkUp</span></a>
+          <button class="theme-toggle" id="authTheme" type="button" aria-label="Toggle dark mode">
+            <span class="theme-toggle__sun" id="sunIcon"></span>
+            <span class="theme-toggle__moon" id="moonIcon"></span>
+          </button>
+        </div>
+
+        <h1 class="auth__title">Create account</h1>
+        <p class="auth__desc">It is free, and takes about thirty seconds.</p>
+
+        <form id="registerForm" novalidate>
+          <div class="field">
+            <label class="field__label" for="fullName">Full name</label>
+            <input class="input" id="fullName" name="fullName" type="text" placeholder="Full name" autocomplete="name" required />
+            <span class="field__error" data-error-for="fullName"></span>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="username">Username</label>
+            <input class="input" id="username" name="username" type="text" placeholder="Username" autocomplete="username" required />
+            <span class="field__error" data-error-for="username"></span>
+            <span class="field__hint">Letters, numbers, dots and underscores. 3–30 characters.</span>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="email">Email</label>
+            <input class="input" id="email" name="email" type="email" placeholder="Email address" autocomplete="email" required />
+            <span class="field__error" data-error-for="email"></span>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="password">Password</label>
+            <div class="input-group">
+              <input class="input" id="password" name="password" type="password" placeholder="At least 8 characters" autocomplete="new-password" required />
+              <button class="input-group__action" id="togglePassword" type="button" aria-label="Show password"></button>
+            </div>
+            <div class="password-meter"><div class="password-meter__bar" id="passwordMeter"></div></div>
+            <span class="field__error" data-error-for="password"></span>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="confirmPassword">Confirm password</label>
+            <input class="input" id="confirmPassword" name="confirmPassword" type="password" placeholder="Repeat your password" autocomplete="new-password" required />
+            <span class="field__error" data-error-for="confirmPassword"></span>
+          </div>
+
+          <button class="btn btn--primary btn--block btn--lg" type="submit">Create account</button>
+        </form>
+
+        <p class="auth__foot">Already have an account? <a href="login.html">Log in</a></p>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/api.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/auth.js"></script>
+  <script>
+    (function decorate() {
+      'use strict';
+      const { Icons, Theme, escapeHtml } = window.UI;
+
+      document.getElementById('asideMark').innerHTML = Icons.logo;
+      document.getElementById('cardMark').innerHTML = Icons.logo;
+      document.getElementById('sunIcon').innerHTML = Icons.sun;
+      document.getElementById('moonIcon').innerHTML = Icons.moon;
+      document.getElementById('authTheme').addEventListener('click', () => Theme.toggle());
+
+      const points = [
+        { icon: Icons.zap, text: 'No setup — just pick a username' },
+        { icon: Icons.shield, text: 'Passwords hashed with bcrypt' },
+        { icon: Icons.camera, text: 'Upload a profile picture anytime' },
+        { icon: Icons.sparkle, text: 'Dark mode included' },
+      ];
+
+      document.getElementById('asidePoints').innerHTML = points
+        .map((p) => `<div class="auth__point"><span class="auth__point-icon">${p.icon}</span><span>${escapeHtml(p.text)}</span></div>`)
+        .join('');
+    })();
+  </script>
+</body>
+</html>

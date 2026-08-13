@@ -1,0 +1,85 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run Backend (server.js)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/backend/server.js",
+      "cwd": "${workspaceFolder}/backend",
+      "envFile": "${workspaceFolder}/backend/.env",
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Debug Backend (breakpoints)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/backend/server.js",
+      "cwd": "${workspaceFolder}/backend",
+      "envFile": "${workspaceFolder}/backend/.env",
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**", "${workspaceFolder}/backend/node_modules/**"]
+    },
+    {
+      "name": "Debug Backend (nodemon auto-restart)",
+      "type": "node",
+      "request": "launch",
+      "runtimeExecutable": "${workspaceFolder}/backend/node_modules/.bin/nodemon",
+      "program": "${workspaceFolder}/backend/server.js",
+      "cwd": "${workspaceFolder}/backend",
+      "envFile": "${workspaceFolder}/backend/.env",
+      "console": "integratedTerminal",
+      "restart": true,
+      "skipFiles": ["<node_internals>/**", "${workspaceFolder}/backend/node_modules/**"]
+    },
+    {
+      "name": "Seed demo data",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/backend/utils/seed.js",
+      "cwd": "${workspaceFolder}/backend",
+      "envFile": "${workspaceFolder}/backend/.env",
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Run smoke tests",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/backend/utils/smokeTest.js",
+      "cwd": "${workspaceFolder}/backend",
+      "envFile": "${workspaceFolder}/backend/.env",
+      "env": {
+        "MONGO_URI": "mongodb://127.0.0.1:27017/socialmedia_test",
+        "NODE_ENV": "test"
+      },
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Run Frontend (server.js)",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/frontend/server.js",
+      "cwd": "${workspaceFolder}/frontend",
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "Open frontend in Chrome",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:5173",
+      "webRoot": "${workspaceFolder}/frontend",
+      "sourceMaps": false
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Backend + Chrome (full stack)",
+      "configurations": ["Run Backend (server.js)", "Run Frontend (server.js)", "Open frontend in Chrome"],
+      "stopAll": true
+    }
+  ]
+}

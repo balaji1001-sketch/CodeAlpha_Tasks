@@ -1,0 +1,158 @@
+# LinkUp API — click "Send Request" above any block.
+# Requires the REST Client extension (humao.rest-client), which is in
+# .vscode/extensions.json, so VS Code will offer to install it.
+#
+# Run them top to bottom: login captures the token, and later requests reuse it.
+
+@baseUrl = http://localhost:5000/api
+@email = ada@example.com
+@password = Password123
+
+### Health check
+GET {{baseUrl}}/health
+
+### Register a new account
+# @name register
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "testuser",
+  "fullName": "Test User",
+  "email": "testuser@example.com",
+  "password": "Password123"
+}
+
+### Log in (captures the token for every request below)
+# @name login
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "identifier": "{{email}}",
+  "password": "{{password}}"
+}
+
+###
+@token = {{login.response.body.data.token}}
+@userId = {{login.response.body.data.user.id}}
+
+### Who am I
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{token}}
+
+### My profile
+GET {{baseUrl}}/users/profile
+Authorization: Bearer {{token}}
+
+### Update my bio
+PUT {{baseUrl}}/users/profile
+Authorization: Bearer {{token}}
+Content-Type: application/x-www-form-urlencoded
+
+bio=Updated from VS Code REST Client&fullName=Ada Lovelace
+
+### Search users
+GET {{baseUrl}}/users/search?q=ad
+Authorization: Bearer {{token}}
+
+### Suggested users to follow
+GET {{baseUrl}}/users/suggestions?limit=5
+Authorization: Bearer {{token}}
+
+### Public profile by username
+GET {{baseUrl}}/users/linus
+Authorization: Bearer {{token}}
+
+### Global feed
+# @name feed
+GET {{baseUrl}}/posts?page=1&limit=5
+Authorization: Bearer {{token}}
+
+###
+@postId = {{feed.response.body.data.posts.0.id}}
+@otherUserId = {{feed.response.body.data.posts.0.user.id}}
+
+### Following-only feed
+GET {{baseUrl}}/posts?feed=following&page=1&limit=5
+Authorization: Bearer {{token}}
+
+### Single post with its comments
+GET {{baseUrl}}/posts/{{postId}}
+Authorization: Bearer {{token}}
+
+### Like / unlike a post (run twice to toggle)
+POST {{baseUrl}}/posts/{{postId}}/like
+Authorization: Bearer {{token}}
+
+### Who liked this post
+GET {{baseUrl}}/posts/{{postId}}/likes
+Authorization: Bearer {{token}}
+
+### Comments on a post
+GET {{baseUrl}}/posts/{{postId}}/comments
+Authorization: Bearer {{token}}
+
+### Add a comment
+POST {{baseUrl}}/posts/{{postId}}/comments
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "comment": "Posted from the VS Code REST Client."
+}
+
+### Follow / unfollow a user (run twice to toggle)
+POST {{baseUrl}}/users/{{otherUserId}}/follow
+Authorization: Bearer {{token}}
+
+### A user's followers
+GET {{baseUrl}}/users/{{otherUserId}}/followers
+Authorization: Bearer {{token}}
+
+### A user's posts
+GET {{baseUrl}}/users/{{userId}}/posts?page=1&limit=6
+Authorization: Bearer {{token}}
+
+### Update a post caption
+PUT {{baseUrl}}/posts/{{postId}}
+Authorization: Bearer {{token}}
+Content-Type: application/x-www-form-urlencoded
+
+caption=Caption edited via REST Client
+
+### Log out
+POST {{baseUrl}}/auth/logout
+
+# ---------------------------------------------------------------------------
+# Expected failures — useful for confirming validation works
+# ---------------------------------------------------------------------------
+
+### 400 — password shorter than 8 characters
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "username": "shorty",
+  "fullName": "Short Pass",
+  "email": "shorty@example.com",
+  "password": "abc"
+}
+
+### 401 — protected route with no token
+GET {{baseUrl}}/users/profile
+
+### 401 — wrong password
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "identifier": "{{email}}",
+  "password": "TotallyWrong123"
+}
+
+### 400 — malformed post id
+GET {{baseUrl}}/posts/not-a-real-id
+
+### 404 — route that does not exist
+GET {{baseUrl}}/nope

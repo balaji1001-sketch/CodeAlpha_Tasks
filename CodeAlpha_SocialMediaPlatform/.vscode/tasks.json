@@ -1,0 +1,116 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "1. Setup (install + .env + check MongoDB)",
+      "type": "shell",
+      "command": "bash ./setup.sh",
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true },
+      "group": "build"
+    },
+    {
+      "label": "2. Install backend dependencies",
+      "type": "shell",
+      "command": "npm install",
+      "options": { "cwd": "${workspaceFolder}/backend" },
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    },
+    {
+      "label": "3. Start MongoDB (brew service)",
+      "type": "shell",
+      "command": "brew services start mongodb-community@7.0 && sleep 2 && mongosh --quiet --eval 'db.runCommand({ping:1}).ok' mongodb://127.0.0.1:27017/socialmedia && echo 'MongoDB is up.'",
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    },
+    {
+      "label": "4. Seed demo data",
+      "type": "shell",
+      "command": "npm run seed",
+      "options": { "cwd": "${workspaceFolder}/backend" },
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "5. Start dev server (nodemon)",
+      "type": "shell",
+      "command": "npm run dev",
+      "options": { "cwd": "${workspaceFolder}/backend" },
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": [{ "regexp": "^\\s*$", "file": 1, "location": 2, "message": 3 }],
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "\\[nodemon\\] starting",
+          "endsPattern": "Server running in"
+        }
+      },
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true },
+      "group": { "kind": "build", "isDefault": true },
+      "runOptions": { "instanceLimit": 1 }
+    },
+    {
+      "label": "Start server (plain node)",
+      "type": "shell",
+      "command": "npm start",
+      "options": { "cwd": "${workspaceFolder}/backend" },
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    },
+    {
+      "label": "6. Start frontend server",
+      "type": "shell",
+      "command": "npm run dev",
+      "options": { "cwd": "${workspaceFolder}/frontend" },
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" },
+      "runOptions": { "instanceLimit": 1 }
+    },
+    {
+      "label": "Run smoke tests",
+      "type": "shell",
+      "command": "MONGO_URI=mongodb://127.0.0.1:27017/socialmedia_test npm run test:smoke",
+      "options": { "cwd": "${workspaceFolder}/backend" },
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true },
+      "group": { "kind": "test", "isDefault": true }
+    },
+    {
+      "label": "Open app in browser",
+      "type": "shell",
+      "command": "open http://localhost:5173",
+      "problemMatcher": [],
+      "presentation": { "reveal": "silent", "panel": "shared" }
+    },
+    {
+      "label": "Stop MongoDB",
+      "type": "shell",
+      "command": "brew services stop mongodb-community@7.0",
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    },
+    {
+      "label": "Reset database (drop everything)",
+      "type": "shell",
+      "command": "mongosh mongodb://127.0.0.1:27017/socialmedia --quiet --eval 'db.dropDatabase()' && echo 'Database dropped. Run \"Seed demo data\" to repopulate.'",
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    },
+    {
+      "label": "Free port 5000",
+      "type": "shell",
+      "command": "lsof -ti:5000 | xargs kill -9 2>/dev/null; echo 'Port 5000 is free.'",
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    },
+    {
+      "label": "Free port 5173",
+      "type": "shell",
+      "command": "lsof -ti:5173 | xargs kill -9 2>/dev/null; echo 'Port 5173 is free.'",
+      "problemMatcher": [],
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    }
+  ]
+}

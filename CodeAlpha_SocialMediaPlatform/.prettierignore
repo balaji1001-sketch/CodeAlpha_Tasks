@@ -1,0 +1,5 @@
+node_modules/
+backend/uploads/
+package-lock.json
+*.min.js
+*.min.css
