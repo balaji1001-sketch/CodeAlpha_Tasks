@@ -13,6 +13,7 @@
     "start": "cd backend && npm start",
     "start:frontend": "cd frontend && npm start",
     "seed": "cd backend && npm run seed",
+    "unseed": "cd backend && npm run unseed",
     "test": "cd backend && MONGO_URI=mongodb://127.0.0.1:27017/socialmedia_test npm run test:smoke",
     "mongo:start": "brew services start mongodb-community@7.0",
     "mongo:stop": "brew services stop mongodb-community@7.0",

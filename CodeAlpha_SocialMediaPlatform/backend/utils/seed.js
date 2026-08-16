@@ -23,10 +23,11 @@ function makePng(filePath, r, g, b, size = 600) {
     raw[offset] = 0; // filter type: none
     offset += 1;
     for (let x = 0; x < size; x += 1) {
-      const wave = Math.floor((Math.sin((x + y) / 40) + 1) * 30);
-      raw[offset] = Math.min(255, r + wave);
-      raw[offset + 1] = Math.min(255, g + wave);
-      raw[offset + 2] = Math.min(255, b + wave);
+      // Smooth diagonal gradient (darker top-left to lighter bottom-right) instead of banding.
+      const shade = Math.floor(((x + y) / (size * 2)) * 50) - 25;
+      raw[offset] = Math.min(255, Math.max(0, r + shade));
+      raw[offset + 1] = Math.min(255, Math.max(0, g + shade));
+      raw[offset + 2] = Math.min(255, Math.max(0, b + shade));
       offset += 3;
     }
   }
@@ -79,12 +80,7 @@ function crc32(buf) {
   return c ^ 0xffffffff;
 }
 
-const DEMO_USERS = [
-  { username: 'ada', fullName: 'Ada Lovelace', email: 'ada@example.com', bio: 'First programmer. Loves engines.', color: [90, 120, 220] },
-  { username: 'linus', fullName: 'Linus Pauling', email: 'linus@example.com', bio: 'Chemistry, vitamin C, and long walks.', color: [220, 110, 90] },
-  { username: 'grace', fullName: 'Grace Hopper', email: 'grace@example.com', bio: 'Compilers and nanoseconds.', color: [90, 190, 140] },
-  { username: 'alan', fullName: 'Alan Turing', email: 'alan@example.com', bio: 'Machines that think.', color: [180, 120, 210] },
-];
+const DEMO_USERS = require('./demoUsers');
 
 const CAPTIONS = [
   'Golden hour on the roof. #nofilter',

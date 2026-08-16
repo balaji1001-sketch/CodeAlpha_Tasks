@@ -56,8 +56,13 @@ node -e "console.log(require('crypto').randomBytes(48).toString('hex'))"
 
 # 4. Start MongoDB locally, or use Atlas — set MONGO_URI in backend/.env
 
+# 5. Seed demo data (users/posts/comments — the DB is empty otherwise,
+#    and login/the demo account will fail until you run this)
+cd backend
+npm run seed
+cd ..
 
-# 5. Run both servers
+# 6. Run both servers
 npm run dev:all
 ```
 
@@ -84,6 +89,9 @@ npm run seed
 Creates 4 demo users (all following each other), 12 posts, 24 comments.
 Login: `ada@example.com` / `Password123` (also `linus`, `grace`, `alan`).
 The login page has a "Use the demo account" button.
+
+> Re-running `npm run seed` clears and recreates these collections, so only
+> run it once per database unless you want to reset your data.
 
 ### Run tests
 
